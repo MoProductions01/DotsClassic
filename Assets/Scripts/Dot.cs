@@ -75,6 +75,6 @@ public class Dot : MonoBehaviour
 		this.row = row;
 		this.col = col;
 		transform.position = pos;
-		transform.DOMoveY ( tweenEndLoc, .2f).SetEase(Ease.OutBounce);
+		transform.DOMoveY ( tweenEndLoc, .5f).SetEase(Ease.OutBounce);		
 	}
 }

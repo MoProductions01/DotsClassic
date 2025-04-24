@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour {
 	static float DOT_SPACING = .803f;
 	static int BOARD_SIZE = 6;
 
+	enum eGameState {NOT_PLAYING, PLAYING}
+	eGameState GameState;
+
 	// list of colors for random generation
 	Color[] dotsColors = { dotsRed, dotsBlue, dotsGreen, dotsYellow, dotsPurple };
 	bool isDrawingLines; // keeps track of if we're in line drawing mode	
@@ -31,12 +34,20 @@ public class GameManager : MonoBehaviour {
 	Dot[,] dotGrid = new Dot[BOARD_SIZE, BOARD_SIZE];	// 2D array representing the game grid
 	Dot latestDot;	// the last dot selected
 	
+	public GameObject startButton; // Start button that shows up before you start playing
 	public GameObject dotTemplate;	// GameObject that all the dots are created from
 	public LineRenderer connectionLineRenderer;	// LineRenderer for connecting the dots. Used to create instances when connections are made
 	public SpriteRenderer squareOverlay;	// overlay when a square is active on the board
 	
-	void Start () 
+	public void StartGame()
 	{
+		GameState = eGameState.PLAYING;
+		startButton.gameObject.SetActive(false);
+	}
+
+	void Start () 
+	{				
+		GameState = eGameState.NOT_PLAYING; // Waiting for start button to be clicked
 		dotContainer = new GameObject("dotContainer"); // this is just to keep all the board dots tidy in the Hierarchy		
 		FillBoard ();	// fill up the board with new dots
 		isDrawingLines = false;	
@@ -51,11 +62,14 @@ public class GameManager : MonoBehaviour {
 		float worldScreenHeight = Camera.main.orthographicSize * 2.0f;
 		float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
 		squareOverlay.transform.localScale = new Vector3( worldScreenWidth / width, (worldScreenHeight / height)*.8f, 1f );
-		squareOverlay.gameObject.SetActive(false);
-	}
-			
+		squareOverlay.gameObject.SetActive(false);				
+	}				
+
 	void Update () 
 	{
+		//Only do this if we're playing
+		if (GameState != eGameState.PLAYING) return;		
+
 		// check for button press
 		if( Input.GetMouseButtonDown(0) )
 		{ 
@@ -271,6 +285,9 @@ public class GameManager : MonoBehaviour {
 	/// </summary>
 	void FillBoard()
 	{
+		// destroy the old board
+		Debug.Log("Num children: " + dotContainer.transform.childCount);
+
 		for( int row=0; row < BOARD_SIZE; row++ )
 		{
 			for(int col=0; col < BOARD_SIZE; col++ )
