@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
 	// list of colors for random generation
 	Color[] dotsColors = { dotsRed, dotsBlue, dotsGreen, dotsYellow, dotsPurple };
 	bool isDrawingLines; // keeps track of if we're in line drawing mode	
-	GameObject dotContainer;	// this is just to keep the Hierarchy tidy when the 36 dots show up
+	public GameObject dotContainer;	// this is just to keep the Hierarchy tidy when the 36 dots show up
 
 	List<DotConnection> dotConnections = new List<DotConnection>();	// list of current connections between dots on the board
 	List<DotConnection> squareDotConnections = new List<DotConnection>();	// list of connections that form complete squares
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
 	
 	void Start () 
 	{
-		dotContainer = new GameObject("dotContainer"); // this is just to keep all the board dots tidy in the Hierarchy
+		dotContainer = new GameObject("dotContainer"); // this is just to keep all the board dots tidy in the Hierarchy		
 		FillBoard ();	// fill up the board with new dots
 		isDrawingLines = false;	
 		// switch off the line renderer and dot template so they're not visible at the start of the game
