@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
 	private float timer; // keeps track of time
 	public TMP_Text scoreText; // text for score
 	private int score; // current score
-	static private float GAME_TIME = 5f;
+	static private float GAME_TIME = 60f;
 
 	// list of colors for random generation
 	Color[] dotsColors = { dotsRed, dotsBlue, dotsGreen, dotsYellow, dotsPurple };
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
-			timerText.text = Mathf.CeilToInt(timer % 60f).ToString("00");
+			timerText.text = Mathf.CeilToInt(timer % GAME_TIME).ToString("00");
 		}
 	}
 
@@ -314,6 +314,7 @@ public class GameManager : MonoBehaviour {
 		                            UPPER_LEFT.y - DOT_SPACING * (float)row, row, col );
 		dotObject.transform.parent = dotContainer.transform;	// put it in the dot container for tidyness
 		dotGrid[row,col] = dotObject;	// update the game grid
+		//dotObject.color = dotsYellow;
 	}
 
 	/// <summary>
@@ -353,13 +354,25 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		// Below is example debug code to force a certain shape on the board
+		dotGrid[0,0].color = dotsBlue;
+		dotGrid[0,1].color = dotsBlue;
+		dotGrid[1,0].color = dotsBlue;	
+		dotGrid[1,1].color = dotsBlue;		
 		
-		dotGrid[5,5].color = dotsRed;
-		dotGrid[4,5].color = dotsRed;
-		dotGrid[3,5].color = dotsRed;
 		
-		dotGrid[5,4].color = dotsRed;
-		dotGrid[4,4].color = dotsRed;
 		dotGrid[3,4].color = dotsRed;
+		dotGrid[3,5].color = dotsRed;
+		dotGrid[4,4].color = dotsRed;
+		dotGrid[4,5].color = dotsRed;
+		
+		dotGrid[5,2].color = dotsPurple;
+		dotGrid[5,3].color = dotsPurple;
+		
+		dotGrid[2,2].color = dotsGreen;
+		dotGrid[3,2].color = dotsGreen;
+		dotGrid[4,2].color = dotsGreen;
 	}
 }
+//1,0
+//0,0
+//0,1
