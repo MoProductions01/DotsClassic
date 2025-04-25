@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
@@ -19,8 +20,13 @@ public class GameManager : MonoBehaviour {
 	static float DOT_SPACING = .803f;
 	static int BOARD_SIZE = 6;
 
-	enum eGameState {NOT_PLAYING, PLAYING}
-	eGameState GameState;
+	enum eGameState {NOT_PLAYING, PLAYING} // whether or not the game is active
+	eGameState GameState; // current state of the game
+	public TMP_Text timerText; // text for the timer
+	private float timer; // keeps track of time
+	public TMP_Text scoreText; // text for score
+	private int score; // current score
+	static private float GAME_TIME = 5f;
 
 	// list of colors for random generation
 	Color[] dotsColors = { dotsRed, dotsBlue, dotsGreen, dotsYellow, dotsPurple };
@@ -39,17 +45,42 @@ public class GameManager : MonoBehaviour {
 	public LineRenderer connectionLineRenderer;	// LineRenderer for connecting the dots. Used to create instances when connections are made
 	public SpriteRenderer squareOverlay;	// overlay when a square is active on the board
 	
+	void UpdateTimer(float deltaTime)
+	{
+		timer -= deltaTime;
+		if(timer <= 0f)
+		{	// game over
+			GameState = eGameState.NOT_PLAYING;
+			timerText.text = timer.ToString("00");
+			startButton.gameObject.SetActive(true);
+		}
+		else
+		{
+			timerText.text = Mathf.CeilToInt(timer % 60f).ToString("00");
+		}
+	}
+
+	void UpdateScore(int pointsEarned)
+	{
+		score += pointsEarned;
+		scoreText.text = score.ToString();
+	}
+
 	public void StartGame()
 	{
-		GameState = eGameState.PLAYING;
-		startButton.gameObject.SetActive(false);
+		GameState = eGameState.PLAYING; // we are now playing
+		startButton.gameObject.SetActive(false); // shut off button
+		FillBoard ();	// fill up the board with new dots
+		score = 0;	// default values
+		UpdateScore(0);
+		timer = GAME_TIME;
 	}
 
 	void Start () 
 	{				
 		GameState = eGameState.NOT_PLAYING; // Waiting for start button to be clicked
 		dotContainer = new GameObject("dotContainer"); // this is just to keep all the board dots tidy in the Hierarchy		
-		FillBoard ();	// fill up the board with new dots
+		//FillBoard ();	// fill up the board with new dots
 		isDrawingLines = false;	
 		// switch off the line renderer and dot template so they're not visible at the start of the game
 		connectionLineRenderer.gameObject.SetActive(false);
@@ -68,7 +99,8 @@ public class GameManager : MonoBehaviour {
 	void Update () 
 	{
 		//Only do this if we're playing
-		if (GameState != eGameState.PLAYING) return;		
+		if (GameState != eGameState.PLAYING) return;
+		UpdateTimer(Time.deltaTime);		
 
 		// check for button press
 		if( Input.GetMouseButtonDown(0) )
@@ -205,6 +237,10 @@ public class GameManager : MonoBehaviour {
 						}
 					}
 				}
+				int points = curLineDots.Count;
+				if(madeSquare == true) points *= 4;
+				print("give points: " + points);
+				UpdateScore(points);
 				foreach( Dot dot in curLineDots )	// fill up the array keeping track of how many new dots we need to fill for each column
 				{				
 					numDotsToFillPerColumn[dot.col]++;
@@ -270,6 +306,7 @@ public class GameManager : MonoBehaviour {
 	void SetUpNewDot( int row, int col )
 	{
 		GameObject obj = GameObject.Instantiate(dotTemplate);	// instantiate a new dot 
+		obj.name = row + "," + col;
 		obj.SetActive(true); 	// make sure it's turned on
 		Dot dotObject = obj.GetComponent<Dot>();
 		// init the new dot object with a random color and the correct row, column and tween values for the drop
@@ -287,6 +324,27 @@ public class GameManager : MonoBehaviour {
 	{
 		// destroy the old board
 		Debug.Log("Num children: " + dotContainer.transform.childCount);
+		if(dotContainer.transform.childCount > 36)
+		{
+			Debug.Log("WTF");
+		}
+		if(dotContainer.transform.childCount > 0)
+		{	
+			int i=0;
+			foreach( Transform dot in dotContainer.transform)
+			{
+				i++;
+				Destroy(dot.gameObject);
+			}
+			Debug.Log("i:" + i);
+			for( int row=0; row<BOARD_SIZE; row++)
+			{
+				for( int col = 0; col<BOARD_SIZE; col++)
+				{							
+					dotGrid[row,col] = null;
+				}
+			}
+		}
 
 		for( int row=0; row < BOARD_SIZE; row++ )
 		{
@@ -296,13 +354,13 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		// Below is example debug code to force a certain shape on the board
-		/*
+		
 		dotGrid[5,5].color = dotsRed;
 		dotGrid[4,5].color = dotsRed;
 		dotGrid[3,5].color = dotsRed;
 		
 		dotGrid[5,4].color = dotsRed;
 		dotGrid[4,4].color = dotsRed;
-		dotGrid[3,4].color = dotsRed;*/
+		dotGrid[3,4].color = dotsRed;
 	}
 }
