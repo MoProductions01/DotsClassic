@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour {
 		score = 0;	// default values
 		UpdateScore(0);
 		timer = GAME_TIME;
+		curLineDots.Clear();
 	}
 
 	void Start () 
@@ -238,8 +239,7 @@ public class GameManager : MonoBehaviour {
 					}
 				}
 				int points = curLineDots.Count;
-				if(madeSquare == true) points *= 4;
-				print("give points: " + points);
+				if(madeSquare == true) points *= 4; // if you've made a square then multiple the value of the points				
 				UpdateScore(points);
 				foreach( Dot dot in curLineDots )	// fill up the array keeping track of how many new dots we need to fill for each column
 				{				
@@ -323,7 +323,7 @@ public class GameManager : MonoBehaviour {
 	void FillBoard()
 	{
 		// destroy the old board
-		Debug.Log("Num children: " + dotContainer.transform.childCount);
+		//Debug.Log("Num children: " + dotContainer.transform.childCount);
 		if(dotContainer.transform.childCount > 36)
 		{
 			Debug.Log("WTF");
@@ -336,7 +336,7 @@ public class GameManager : MonoBehaviour {
 				i++;
 				Destroy(dot.gameObject);
 			}
-			Debug.Log("i:" + i);
+			//Debug.Log("i:" + i);
 			for( int row=0; row<BOARD_SIZE; row++)
 			{
 				for( int col = 0; col<BOARD_SIZE; col++)
