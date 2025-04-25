@@ -81,8 +81,7 @@ public class GameManager : MonoBehaviour {
 	{				
 		GameState = eGameState.NOT_PLAYING; // Waiting for start button to be clicked
 		dotContainer = new GameObject("dotContainer"); // this is just to keep all the board dots tidy in the Hierarchy		
-		//FillBoard ();	// fill up the board with new dots
-		isDrawingLines = false;	
+		isDrawingLines = false;	// currently not drawing lines between dots
 		// switch off the line renderer and dot template so they're not visible at the start of the game
 		connectionLineRenderer.gameObject.SetActive(false);
 		dotTemplate.gameObject.SetActive(false);
