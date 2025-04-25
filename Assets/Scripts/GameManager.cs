@@ -326,7 +326,7 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log("Num children: " + dotContainer.transform.childCount);
 		if(dotContainer.transform.childCount > 36)
 		{
-			Debug.Log("WTF");
+		//	Debug.Log("WTF");
 		}
 		if(dotContainer.transform.childCount > 0)
 		{	
