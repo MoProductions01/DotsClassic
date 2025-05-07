@@ -354,16 +354,18 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		// Below is example debug code to force a certain shape on the board
+		/*dotGrid[4,4].color = dotsRed;
+		dotGrid[4,5].color = dotsRed;
+		dotGrid[5,4].color = dotsRed;
+		dotGrid[5,5].color = dotsRed;*/
+
 		/*dotGrid[0,0].color = dotsBlue;
 		dotGrid[0,1].color = dotsBlue;
 		dotGrid[1,0].color = dotsBlue;	
 		dotGrid[1,1].color = dotsBlue;		
 		
 		
-		dotGrid[3,4].color = dotsRed;
-		dotGrid[3,5].color = dotsRed;
-		dotGrid[4,4].color = dotsRed;
-		dotGrid[4,5].color = dotsRed;
+		
 		
 		dotGrid[5,2].color = dotsPurple;
 		dotGrid[5,3].color = dotsPurple;
